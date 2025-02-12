@@ -1,0 +1,94 @@
+/******************************************************************************
+
+                            Online C Compiler.
+                Code, Compile, Run and Debug C program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct node_t
+{
+    struct node_t *next;
+    unsigned int ts;
+}node;
+
+node *head = NULL;// malloc(sizeof(node));
+
+void insert(unsigned int ts)
+{
+    printf("\nts = %d\n",ts);
+    if(!head)
+    {
+        printf("head\n");
+        head = malloc(sizeof(node));
+        head->next = NULL;
+        head->ts = ts;
+        return;
+    }
+    
+    if(ts <= head->ts)
+    {
+      node *ptr = malloc(sizeof(node));
+      ptr->ts = ts;
+      ptr->next = head;
+      head = ptr;
+      return;
+    }
+    
+    node *prev = NULL;
+    node *curr = head;
+    
+    while(curr)
+    {
+        if(ts >= curr->ts)
+        {
+            printf("ts = %d curr ts = %d", ts, curr->ts);
+            node *ptr = malloc(sizeof(node));
+            ptr->ts = ts;
+            ptr->next = NULL;
+            
+            if(prev && prev->next)
+            {
+               printf("prev -> ts = %d\n", prev->ts);
+               ptr->next = prev->next;
+               prev->next = ptr;
+            }
+            else
+            {
+                node *p_next = curr->next;
+                ptr->next = curr->next;
+                curr->next = ptr;
+            }
+           
+            return;
+        }
+        prev=curr;
+        curr = curr->next;
+    }
+    
+    
+}
+
+void pop()
+{
+    node* p = head;
+    while(p)
+    {
+        printf("\np->ts = %d\n", p->ts);
+        p = p->next;
+    }
+}
+
+int main()
+{
+    printf("Hello World");
+    
+    insert(91);
+insert(13);
+insert(21);
+insert(31);
+pop();
+    return 0;
+}
