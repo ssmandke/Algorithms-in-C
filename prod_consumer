@@ -1,0 +1,35 @@
+
+typedef struct buf_t
+{
+   int head, tail, cnt;
+   int buf[MAX_SIZE];
+   sem_t notFull;
+   sem_t notEmpty;
+   pthread_cond_t isFull;
+   pthread_cond_t isEmpty;
+   pthread_mutex_t mutex;
+}buf;
+
+void producer(buf* q, int data)
+{
+   pthread_lock_mutex(&q->mutex);
+
+  while(q->isFull)
+  {
+     pthread_cond_wait(q->notFull);
+  }
+
+   q->buf[q->head] = data;
+   q-> head = (q-> head + 1) % MAX_SIZE;
+
+   q->cnt++;
+
+   if(q->cnt == MAX_SIZE)
+   {
+     q->isFull = true;
+   }
+
+   sem_post(notEmpty);
+
+   pthread_unlock_mutex(&q->mutex);
+}
